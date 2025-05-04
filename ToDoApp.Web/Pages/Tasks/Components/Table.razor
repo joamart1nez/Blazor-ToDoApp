@@ -1,4 +1,5 @@
 ﻿@using ToDoApp.Application.Features.Tasks.Domain
+@using ToDoApp.Web.Shared.Components
 
 <MudTable Items="@Tasks" Hover="true" Striped="true" Loading="@IsLoading">
     <HeaderContent>
@@ -48,7 +49,7 @@
     {
         var parameters = new DialogParameters()
         {
-            { "TaskId", taskId },
+            { "ItemId", taskId },
             { "OnDeleteCallback", EventCallback.Factory.Create<int>(this, OnDelete) }
         };
 

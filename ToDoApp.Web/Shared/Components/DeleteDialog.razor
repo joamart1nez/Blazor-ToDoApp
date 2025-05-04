@@ -3,10 +3,10 @@
 
 <MudDialog>
     <TitleContent>
-        <MudText Typo="Typo.h6">Delete Task</MudText>
+        <MudText Typo="Typo.h6">Delete</MudText>
     </TitleContent>
     <DialogContent>
-        <MudText>Are you sure you want to delete task #@TaskId?</MudText>
+        <MudText>Are you sure you want to delete item with Id #@ItemId?</MudText>
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="Cancel">Cancel</MudButton>
@@ -17,7 +17,7 @@
 @code {
     [CascadingParameter] public IMudDialogInstance MudDialog { get; set; } = null!;
 
-    [Parameter] public int TaskId { get; set; }
+    [Parameter] public int ItemId { get; set; }
 
     [Parameter] public EventCallback<int> OnDeleteCallback { get; set; }
 
@@ -28,7 +28,7 @@
 
     private async Task Delete()
     {
-        await OnDeleteCallback.InvokeAsync(TaskId);
+        await OnDeleteCallback.InvokeAsync(ItemId);
 
         MudDialog.Close(DialogResult.Ok(true));
     }

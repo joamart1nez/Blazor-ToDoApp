@@ -1,0 +1,12 @@
+﻿@using ToDoApp.Web.Pages.Categories.Components
+
+@attribute [Route(CategoriesRoute.Index)]
+@inherits CategoriesPage
+
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="py-8">
+    <div class="d-flex justify-space-between pb-5 align-center">
+        <MudText Typo="Typo.h3">Categories</MudText>
+    </div>
+
+    <Table Categories="@Categories" OnCreate="CreateCategory" OnDelete="DeleteCategory"/>
+</MudContainer>

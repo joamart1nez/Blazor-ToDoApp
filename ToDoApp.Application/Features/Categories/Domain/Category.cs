@@ -29,4 +29,6 @@ public class Category
     /// Color code (e.g., hex) for UI display.
     /// </summary>
     public string? Color { get; set; }
+
+    public static Category Create(string? name = null, string? color = null) => new() { Name = name ?? string.Empty, Color = color };
 }

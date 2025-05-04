@@ -22,8 +22,4 @@
     <ProjectReference Include="..\ToDoApp.Infrastructure\ToDoApp.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Pages\Categories\" />
-  </ItemGroup>
-
 </Project>

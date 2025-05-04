@@ -1,0 +1,80 @@
+﻿@using ToDoApp.Application.Features.Categories.Domain
+@using MudBlazor
+@using ToDoApp.Web.Shared.Components
+
+<MudSimpleTable>
+    <thead>
+        <tr>
+            <MudTh>Name</MudTh>
+            <MudTh>Color</MudTh>
+            <MudTh>Actions</MudTh>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var category in Categories)
+        {
+            <tr>
+                <MudTd>@category.Name</MudTd>
+                <MudTd>
+                    <div style="width: 24px; height: 24px; background: @category.Color; border: 1px solid #ccc; border-radius: 4px;"></div>
+                </MudTd>
+                <MudTd>
+                    <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                   Color="Color.Error"
+                                   OnClick="async () => await DeleteCategory(category.Id)" />
+                </MudTd>
+            </tr>
+        }
+        <RowForm OnCreate="CreateCategory" />
+    </tbody>
+</MudSimpleTable>
+
+@code {
+    [Parameter]
+    public List<Category> Categories { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<int> OnDelete { get; set; }
+
+    [Parameter]
+    public EventCallback<Category> OnCreate { get; set; }
+
+    [Inject]
+    private ISnackbar Snackbar { get; set; } = null!;
+
+    [Inject]
+    private IDialogService DialogService { get; set; } = null!;
+
+    public Category NewCategory { get; set; } = Category.Create();
+
+
+    protected override void OnInitialized()
+    {
+        NewCategory = Category.Create();
+    }
+
+    private async Task DeleteCategory(int categoryId)
+    {
+        var parameters = new DialogParameters()
+        {
+            { "ItemId", categoryId },
+            { "OnDeleteCallback", EventCallback.Factory.Create<int>(this, OnDelete) }
+        };
+
+        IDialogReference dialog = await DialogService.ShowAsync<DeleteDialog>("Delete Category", parameters);
+        DialogResult? result = await dialog.Result;
+
+        if (result is not null && !result.Canceled)
+        {
+            Snackbar.Add("Category deleted successfully", Severity.Success);
+        }
+    }
+
+    private async Task CreateCategory()
+    {
+        EventCallback<Category> CreateCategoryCallback = EventCallback.Factory.Create<Category>(this, OnCreate);
+        await CreateCategoryCallback.InvokeAsync(NewCategory);
+
+        NewCategory = Category.Create();
+    }
+}

@@ -1,0 +1,44 @@
+﻿@using ToDoApp.Application.Features.Categories.Domain
+@using MudBlazor
+
+<tr>
+    <MudTd>
+        <MudTextField @bind-Value="@NewCategory.Name"
+                      Label="Name"
+                      Required
+                      Immediate="true"
+                      Variant="Variant.Outlined" />
+    </MudTd>
+    <MudTd>
+        <MudColorPicker Label="Choose color"
+                        Variant="Variant.Outlined"
+                        @bind-Text="@NewCategory.Color"
+                        ShowAlpha="false"
+                        DisableInput="true" />
+    </MudTd>
+    <MudTd>
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   OnClick="CreateCategory"
+                   StartIcon="@Icons.Material.Filled.Add">
+            Add
+        </MudButton>
+    </MudTd>
+</tr>
+
+@code {
+    [Parameter] public EventCallback<Category> OnCreate { get; set; }
+
+    public Category NewCategory { get; set; } = Category.Create();
+
+    protected override void OnInitialized()
+    {
+        NewCategory = Category.Create();
+    }
+
+    private async Task CreateCategory()
+    {
+        await OnCreate.InvokeAsync(NewCategory);
+        NewCategory = Category.Create();
+    }
+}
