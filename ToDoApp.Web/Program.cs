@@ -30,7 +30,9 @@ builder.Services.AddAutoMapper((serviceProvider, cfg) => AutoMapperConfig.Regist
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
-           .LogTo(Console.WriteLine, LogLevel.Information)); // <-- Logging de EF Core
+           .LogTo(Console.WriteLine, LogLevel.Information)
+           .EnableSensitiveDataLogging()
+           );
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining(typeof(ToDoApp.Application.AssemblyReference)));
 

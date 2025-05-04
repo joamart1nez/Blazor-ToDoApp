@@ -4,8 +4,9 @@
 @using ToDoApp.Application.Features.Tasks.Commands.Edit
 @using ToDoApp.Application.Features.Tasks.Commands.Shared
 @using ToDoApp.Application.Features.Tasks.Domain
+@using System.ComponentModel.DataAnnotations
 
-<MudForm @ref="MudFormRef" Model="Task">
+<MudForm @ref="MudFormRef" Model="Task" @onsubmit="HandleValidSubmit">
     @if (Task.Exist)
     {
         <MudTextField @bind-Value="Task.Id"
@@ -30,13 +31,13 @@
                    DateChanged="@(d => Task.DueDate = d)"
                    Label="Due Date"
                    Variant="Variant.Outlined"
-                   DateFormat="MM/dd/yyyy" 
-                   MinDate="@DateTime.UtcNow.AddDays(-1)"/>
+                   DateFormat="MM/dd/yyyy"
+                   MinDate="@DateTime.UtcNow.AddDays(-1)" />
 
     <MudSelect @bind-Value="Task.Priority"
-                For="@(() => Task.Priority)"
-                Label="Priority"
-                Variant="Variant.Outlined">
+               For="@(() => Task.Priority)"
+               Label="Priority"
+               Variant="Variant.Outlined">
         <MudSelectItem Value="@Priority.Low">Low</MudSelectItem>
         <MudSelectItem Value="@Priority.Medium">Medium</MudSelectItem>
         <MudSelectItem Value="@Priority.High">High</MudSelectItem>
@@ -44,9 +45,9 @@
 
     <div class="d-flex flex-row-reverse gap-4 mt-4">
         <MudButton Variant="Variant.Filled"
-                    Color="Color.Primary"
-                    Disabled="@IsSubmitting"
-                   OnClick="OnSubmit">
+                   Color="Color.Primary"
+                   Disabled="@IsSubmitting"
+                   ButtonType="ButtonType.Submit">
             @(IsSubmitting ? "Saving..." : "Save")
         </MudButton>
         <MudButton Variant="Variant.Text"
@@ -68,4 +69,12 @@
     [Parameter] public bool IsSubmitting { get; set; }
 
     protected MudForm? MudFormRef { get; set; }
+
+    private async Task HandleValidSubmit()
+    {
+        if (MudFormRef?.IsValid == true)
+        {
+            await OnSubmit.InvokeAsync();
+        }
+    }
 }
