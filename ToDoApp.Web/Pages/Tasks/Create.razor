@@ -1,0 +1,15 @@
+﻿@using ToDoApp.Web.Pages.Tasks.Components
+@attribute [Route(TasksRoute.Create)]
+@inherits CreateTaskPage
+
+<PageTitle>New Task</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Medium" Class="py-8">
+    <MudPaper Class="pa-8" Elevation="3">
+        <MudText Typo="Typo.h4" Class="mb-6">Create New Task</MudText>
+        <Form Task="TaskItem"
+                       OnSubmit="SubmitAsync"
+                       OnCancel="Cancel"
+                       IsSubmitting="IsSubmitting" />
+    </MudPaper>
+</MudContainer>

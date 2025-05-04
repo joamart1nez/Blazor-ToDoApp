@@ -1,0 +1,65 @@
+﻿@using ToDoApp.Application.Features.Tasks.Domain
+
+<MudTable Items="@Tasks" Hover="true" Striped="true" Loading="@IsLoading">
+    <HeaderContent>
+        <MudTh>Title</MudTh>
+        <MudTh>Description</MudTh>
+        <MudTh>Due Date</MudTh>
+        <MudTh>Priority</MudTh>
+        <MudTh>State</MudTh>
+        <MudTh>Actions</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd>@context.Title</MudTd>
+        <MudTd>@context.Description</MudTd>
+        <MudTd>@(context.DueDate?.ToString("MM/dd/yyyy") ?? "No date")</MudTd>
+        <MudTd>@context.Priority</MudTd>
+        <MudTd>
+            <MudBadge 
+                Color="@(context.IsCompleted ? Color.Success : Color.Warning)" 
+                Content="@(context.IsCompleted ? "Completed" : "Pending")" 
+            />
+        </MudTd>
+        <MudTd>
+            <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Primary" Href="@TasksRoute.Edit(context.Id)" />
+            <MudIconButton Icon="@(context.IsCompleted ? Icons.Material.Filled.CheckBox : Icons.Material.Filled.CheckBoxOutlineBlank)" OnClick="@(() => ToggleStatus(context.Id))"/>
+            <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="@(() => OpenDeleteDialog(context.Id))" />
+        </MudTd>
+    </RowTemplate>
+    <NoRecordsContent>
+        <MudText Align="Align.Center" Class="py-4">No tasks found</MudText>
+    </NoRecordsContent>
+</MudTable>
+
+@code {
+    [Parameter] public List<TaskItem> Tasks { get; set; } = new();
+
+    [Parameter] public bool IsLoading { get; set; } = true;
+
+    [Parameter] public EventCallback<int> OnDelete { get; set; }
+
+    [Parameter] public EventCallback<int> OnToggleStatus {get; set; }
+
+    [Inject] private ISnackbar Snackbar { get; set; } = null!;
+
+    [Inject] private IDialogService DialogService { get; set; } = null!;
+
+    private async Task OpenDeleteDialog(int taskId)
+    {
+        var parameters = new DialogParameters()
+        {
+            { "TaskId", taskId },
+            { "OnDeleteCallback", EventCallback.Factory.Create<int>(this, OnDelete) }
+        };
+
+        IDialogReference dialog = await DialogService.ShowAsync<DeleteDialog>("Delete Task", parameters);
+        DialogResult? result = await dialog.Result;
+
+        if (result is not null && !result.Canceled)
+        {
+            Snackbar.Add("Task deleted successfully", Severity.Success);
+        }
+    }
+
+    private Task ToggleStatus(int taskId) => OnToggleStatus.InvokeAsync(taskId);
+}

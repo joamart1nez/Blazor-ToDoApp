@@ -1,0 +1,26 @@
+﻿@using ToDoApp.Web.Pages.Tasks.Components
+@attribute [Route(TasksRoute.EditTemplate)]
+@inherits EditTaskPage
+
+<PageTitle>New Task</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Medium" Class="py-8">
+    @if (TaskItem is not null)
+    {
+        <MudPaper Class="pa-8" Elevation="3">
+            <MudText Typo="Typo.h4" Class="mb-6">Edit Task</MudText>
+            <Form Task="TaskItem"
+                  OnSubmit="SubmitAsync"
+                  OnCancel="Cancel"
+                  IsSubmitting="IsSubmitting" />
+        </MudPaper>
+    }
+    else if (IsLoading)
+    {
+        <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+    }
+    else
+    {
+        <MudAlert Severity="Severity.Error">Task not found</MudAlert>
+    }
+</MudContainer>

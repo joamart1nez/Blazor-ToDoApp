@@ -1,0 +1,42 @@
+﻿@attribute [Route(HomeRoute.Index)]
+@inherits HomePage
+
+<PageTitle>Welcome</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="py-8">
+    <div class="d-flex justify-space-between pb-5 align-center">
+        <MudText Typo="Typo.h3">Welcome</MudText>
+    </div>
+
+    <MudGrid>
+        <MudItem xs="6">
+            <MudCard>
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">Status</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudChart 
+                    ChartType="ChartType.Donut"
+                    Height="@ChartHeight"
+                    InputData="@CompletitionData"
+                    InputLabels="@CompletitionLabels"/>
+            </MudCard>
+        </MudItem>
+        <MudItem xs="6">
+           <MudCard>
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">Priority</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudChart 
+                    ChartType="ChartType.Pie"
+                    InputData="@PriorityData"
+                    InputLabels="@PriorityLabels"
+                    Height="@ChartHeight"/>
+           </MudCard>
+        </MudItem>
+
+    </MudGrid>
+</MudContainer>

@@ -1,0 +1,71 @@
+﻿@using ToDoApp.Application.Features.Shared.Enums
+@using ToDoApp.Application.Features.Tasks.Commands
+@using ToDoApp.Application.Features.Tasks.Commands.Create
+@using ToDoApp.Application.Features.Tasks.Commands.Edit
+@using ToDoApp.Application.Features.Tasks.Commands.Shared
+@using ToDoApp.Application.Features.Tasks.Domain
+
+<MudForm @ref="MudFormRef" Model="Task">
+    @if (Task.Exist)
+    {
+        <MudTextField @bind-Value="Task.Id"
+                      Label="ID"
+                      Variant="Variant.Outlined"
+                      Class="d-none" />
+    }
+
+    <MudTextField @bind-Value="Task.Title"
+                  For="@(() => Task.Title)"
+                  Label="Title"
+                  Variant="Variant.Outlined"
+                  Required />
+
+    <MudTextField @bind-Value="Task.Description"
+                  For="@(() => Task.Description)"
+                  Label="Description"
+                  Lines="3"
+                  Variant="Variant.Outlined" />
+
+    <MudDatePicker Date="@Task.DueDate"
+                   DateChanged="@(d => Task.DueDate = d)"
+                   Label="Due Date"
+                   Variant="Variant.Outlined"
+                   DateFormat="MM/dd/yyyy" 
+                   MinDate="@DateTime.UtcNow.AddDays(-1)"/>
+
+    <MudSelect @bind-Value="Task.Priority"
+                For="@(() => Task.Priority)"
+                Label="Priority"
+                Variant="Variant.Outlined">
+        <MudSelectItem Value="@Priority.Low">Low</MudSelectItem>
+        <MudSelectItem Value="@Priority.Medium">Medium</MudSelectItem>
+        <MudSelectItem Value="@Priority.High">High</MudSelectItem>
+    </MudSelect>
+
+    <div class="d-flex flex-row-reverse gap-4 mt-4">
+        <MudButton Variant="Variant.Filled"
+                    Color="Color.Primary"
+                    Disabled="@IsSubmitting"
+                   OnClick="OnSubmit">
+            @(IsSubmitting ? "Saving..." : "Save")
+        </MudButton>
+        <MudButton Variant="Variant.Text"
+                   Color="Color.Error"
+                   OnClick="OnCancel"
+                   Disabled="@IsSubmitting">
+            Cancel
+        </MudButton>
+    </div>
+</MudForm>
+
+@code {
+    [Parameter] public TaskItem Task { get; set; } = null!;
+
+    [Parameter] public EventCallback OnSubmit { get; set; }
+
+    [Parameter] public EventCallback OnCancel { get; set; }
+
+    [Parameter] public bool IsSubmitting { get; set; }
+
+    protected MudForm? MudFormRef { get; set; }
+}

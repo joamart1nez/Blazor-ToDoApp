@@ -1,0 +1,19 @@
+﻿@using ToDoApp.Web.Pages.Tasks.Components
+
+@attribute [Route(TasksRoute.Index)]
+@inherits TasksPage
+
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="py-8">
+<div class="d-flex justify-space-between pb-5 align-center">
+    <MudText Typo="Typo.h3">Tasks</MudText>
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" Href="@TasksRoute.Create">
+        Add new task
+    </MudButton>
+</div>
+
+    <Table 
+        Tasks="@Tasks" 
+        IsLoading="@IsLoading"
+        OnDelete="HandleDelete"
+        OnToggleStatus="HandleToggleStatus" />
+</MudContainer>

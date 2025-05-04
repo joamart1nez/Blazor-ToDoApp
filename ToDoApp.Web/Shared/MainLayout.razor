@@ -1,0 +1,46 @@
+﻿@inherits LayoutComponentBase
+@using MudBlazor
+@using ToDoApp.Web.Pages
+
+<style>
+    html, body, #app {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+</style>
+
+<MudThemeProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+<MudPopoverProvider />
+
+<MudLayout Style="height: 100vh; display: flex; flex-direction: column;">
+    <MudAppBar Elevation="4" Color="Color.Primary">
+        <MudText Typo="Typo.h5" Class="ml-2">ToDo App</MudText>
+    </MudAppBar>
+
+    <MudMainContent Style="flex: 1; display: flex; flex-direction: column; height: 0;">
+        <MudDrawerContainer Class="d-flex flex-grow-1" Style="overflow: hidden;">
+            <MudDrawer @bind-Open="@_open" Fixed="false" Elevation="1" Variant="@DrawerVariant.Mini" OpenMiniOnHover="true">
+                <MudNavMenu>
+                    <MudNavLink Href="@HomeRoute.Index" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
+                    <MudNavLink Href="@TasksRoute.Index" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Task">Tasks</MudNavLink>
+                    <MudNavLink Href="@CategoriesRoute.Index" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Category">Categories</MudNavLink>
+                </MudNavMenu>
+            </MudDrawer>
+            <MudContainer MaxWidth="MaxWidth.False" Class="pa-5 d-flex flex-column flex-grow-1" Style="overflow: auto;">
+                @Body
+            </MudContainer>
+        </MudDrawerContainer>
+    </MudMainContent>
+</MudLayout>
+
+@code
+{
+    private bool _open = false;
+    private void ToggleDrawer()
+    {
+        _open = !_open; 
+    }
+}

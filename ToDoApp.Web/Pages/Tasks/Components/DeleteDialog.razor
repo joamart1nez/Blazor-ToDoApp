@@ -1,0 +1,35 @@
+﻿@using MudBlazor
+@inject IDialogService DialogService
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">Delete Task</MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudText>Are you sure you want to delete task #@TaskId?</MudText>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Error" Variant="Variant.Filled" OnClick="Delete">Delete</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] public IMudDialogInstance MudDialog { get; set; } = null!;
+
+    [Parameter] public int TaskId { get; set; }
+
+    [Parameter] public EventCallback<int> OnDeleteCallback { get; set; }
+
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+
+    private async Task Delete()
+    {
+        await OnDeleteCallback.InvokeAsync(TaskId);
+
+        MudDialog.Close(DialogResult.Ok(true));
+    }
+}
