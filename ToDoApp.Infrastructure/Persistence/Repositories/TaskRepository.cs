@@ -54,6 +54,16 @@ public class TaskRepository(AppDbContext dbContext, IMapper mapper) : ITaskRepos
         await dbContext.SaveChangesAsync();
     }
 
+    public async Task DeleteByIdAsync(int Id)
+    {
+        TaskItemEntity? taskItemEntity = await dbContext.TaskItems
+            .Where(task => task.Id == Id)
+            .FirstOrDefaultAsync() ?? throw new KeyNotFoundException($"Task with id {Id} not found");
+
+        dbContext.Remove(taskItemEntity);
+        await dbContext.SaveChangesAsync();
+    }
+
     public async Task ToggleStatusById(int Id)
     {
         TaskItemEntity taskEntity = await dbContext.TaskItems.FirstOrDefaultAsync(task => task.Id == Id)

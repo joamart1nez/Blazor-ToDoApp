@@ -18,6 +18,8 @@ public interface ITaskRepository
 
     Task DeleteAsync(TaskItem item);
 
+    Task DeleteByIdAsync(int Id);
+
     Task ToggleStatusById(int Id);
 
     Task<TaskStatistics> GetTaskStatisticsAsync();
