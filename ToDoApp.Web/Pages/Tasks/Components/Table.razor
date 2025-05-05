@@ -7,6 +7,7 @@
         <MudTh>Description</MudTh>
         <MudTh>Due Date</MudTh>
         <MudTh>Priority</MudTh>
+        <MudTh>Category</MudTh>
         <MudTh>State</MudTh>
         <MudTh>Actions</MudTh>
     </HeaderContent>
@@ -15,6 +16,7 @@
         <MudTd>@context.Description</MudTd>
         <MudTd>@(context.DueDate?.ToString("MM/dd/yyyy") ?? "No date")</MudTd>
         <MudTd>@context.Priority</MudTd>
+        <MudTd><SmartChip Color="@context?.Category?.Color" Content="@context?.Category?.Name" /></MudTd>
         <MudTd>
             <MudBadge 
                 Color="@(context.IsCompleted ? Color.Success : Color.Warning)" 

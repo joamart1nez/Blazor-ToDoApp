@@ -75,6 +75,7 @@ public partial class CategoriesPage : ComponentBase
             DeleteCategoryCommand deleteCategoryCommand = new() { Id = Id };
             await Mediator.Send(deleteCategoryCommand);
 
+            Snackbar.Add("Category deleted successfully", Severity.Success);
             await LoadCategories();
         }
         catch (Exception ex)

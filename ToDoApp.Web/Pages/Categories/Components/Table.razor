@@ -13,10 +13,12 @@
     <tbody>
         @foreach (var category in Categories)
         {
+            var style = $"background-color: {category.Color}";
+
             <tr>
                 <MudTd>@category.Name</MudTd>
                 <MudTd>
-                    <div style="width: 24px; height: 24px; background: @category.Color; border: 1px solid #ccc; border-radius: 4px;"></div>
+                    <SmartChip Color="@category.Color" Content="@category.Color" />
                 </MudTd>
                 <MudTd>
                     <MudIconButton Icon="@Icons.Material.Filled.Delete"
@@ -45,14 +47,6 @@
     [Inject]
     private IDialogService DialogService { get; set; } = null!;
 
-    public Category NewCategory { get; set; } = Category.Create();
-
-
-    protected override void OnInitialized()
-    {
-        NewCategory = Category.Create();
-    }
-
     private async Task DeleteCategory(int categoryId)
     {
         var parameters = new DialogParameters()
@@ -63,18 +57,11 @@
 
         IDialogReference dialog = await DialogService.ShowAsync<DeleteDialog>("Delete Category", parameters);
         DialogResult? result = await dialog.Result;
-
-        if (result is not null && !result.Canceled)
-        {
-            Snackbar.Add("Category deleted successfully", Severity.Success);
-        }
     }
 
-    private async Task CreateCategory()
+    private async Task CreateCategory(Category newCategory)
     {
         EventCallback<Category> CreateCategoryCallback = EventCallback.Factory.Create<Category>(this, OnCreate);
-        await CreateCategoryCallback.InvokeAsync(NewCategory);
-
-        NewCategory = Category.Create();
+        await CreateCategoryCallback.InvokeAsync(newCategory);
     }
 }

@@ -15,11 +15,7 @@ public class TaskMappingProfile : Profile
         CreateMap<TaskItem, TaskItemEntity>()
             .ForMember(dest => dest.Category, opt => opt.Ignore());
 
-        CreateMap<CreateTaskCommand, TaskItem>()
-            .ForMember(dest => dest.Id, opt => opt.Ignore())
-            .ForMember(dest => dest.IsCompleted, opt => opt.MapFrom(_ => false));
-
-        CreateMap<TaskItem, CreateTaskCommand>();
+        CreateMap<TaskItem, CreateTaskCommand>().ReverseMap();
         CreateMap<TaskItem, EditTaskCommand>().ReverseMap();
     }
 }

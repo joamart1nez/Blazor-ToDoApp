@@ -1,0 +1,42 @@
+﻿@using MediatR
+@using ToDoApp.Application.Features.Categories.Domain
+@using ToDoApp.Application.Features.Categories.Queries.GetAll
+
+<MudSelect T="int?" Value="CategoryId"
+           ValueChanged="CategoryIdChanged"
+           Label="Category"
+           Variant="Variant.Outlined">
+    <MudSelectItem T="int?" Value="null">No Category</MudSelectItem>
+    @foreach (Category category in Categories)
+    {
+        <MudSelectItem T="int?" Value="@category.Id">@category.Name</MudSelectItem>
+    }
+</MudSelect>
+
+@code {
+    [Parameter] public int? CategoryId { get; set; }
+
+    [Parameter] public EventCallback<int?> CategoryIdChanged { get; set; }
+
+    [Inject] protected IMediator Mediator { get; set; } = null!;
+
+    protected List<Category> Categories = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadCategories();
+    }
+
+    private async Task LoadCategories()
+    {
+        try
+        {
+            GetAllCategoriesQuery getAllCategoriesQuery = new();
+            Categories = await Mediator.Send(getAllCategoriesQuery);
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
+}

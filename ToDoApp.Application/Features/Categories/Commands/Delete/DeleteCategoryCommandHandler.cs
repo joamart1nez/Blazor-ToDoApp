@@ -10,6 +10,15 @@ public class DeleteCategoryCommandHandler(ICategoriesRepository repository) : IR
     {
         try
         {
+            bool wasAssignedToATask = await repository.CheckIfWasAssignedToATaskAsync(command.Id);
+
+            if (wasAssignedToATask)
+            {
+                throw new Exception(@"Category was assigned to a task. 
+                                    Please remove the category from the task before deleting it.
+                                    You can do this by using the Edit Task command.");
+            }
+
             await repository.DeleteByIdAsync(command.Id);
         }
         catch (Exception)

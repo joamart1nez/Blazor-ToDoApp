@@ -10,9 +10,11 @@
         <MudPaper Class="pa-8" Elevation="3">
             <MudText Typo="Typo.h4" Class="mb-6">Edit Task</MudText>
             <Form Task="TaskItem"
+                  CategoryId="CategoryId"
                   OnSubmit="SubmitAsync"
                   OnCancel="Cancel"
-                  IsSubmitting="IsSubmitting" />
+                  IsSubmitting="IsSubmitting"
+                  CategoryIdChanged="UpdateCategoryId" />
         </MudPaper>
     }
     else if (IsLoading)

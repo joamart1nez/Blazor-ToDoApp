@@ -24,6 +24,8 @@ public partial class CreateTaskPage : BaseFormTaskPage
         try
         {
             CreateTaskCommand createTaskCommand = Mapper.Map<CreateTaskCommand>(TaskItem);
+            createTaskCommand.CategoryId = CategoryId;
+
             await Mediator.Send(createTaskCommand);
             ShowSuccessMessage("Task created successfully");
         }

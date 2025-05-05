@@ -1,4 +1,7 @@
-﻿@using ToDoApp.Application.Features.Shared.Enums
+﻿@using MediatR
+@using ToDoApp.Application.Features.Categories.Domain
+@using ToDoApp.Application.Features.Categories.Queries.GetAll
+@using ToDoApp.Application.Features.Shared.Enums
 @using ToDoApp.Application.Features.Tasks.Commands
 @using ToDoApp.Application.Features.Tasks.Commands.Create
 @using ToDoApp.Application.Features.Tasks.Commands.Edit
@@ -43,6 +46,8 @@
         <MudSelectItem Value="@Priority.High">High</MudSelectItem>
     </MudSelect>
 
+    <CategorySelector CategoryId="CategoryId" CategoryIdChanged="UpdateCategoryId" />
+
     <div class="d-flex flex-row-reverse gap-4 mt-4">
         <MudButton Variant="Variant.Filled"
                    Color="Color.Primary"
@@ -68,7 +73,20 @@
 
     [Parameter] public bool IsSubmitting { get; set; }
 
+    [Parameter] public int? CategoryId { get; set; }
+
+    [Parameter] public EventCallback<int?> CategoryIdChanged { get; set; }
+
     protected MudForm? MudFormRef { get; set; }
+
+    private async Task UpdateCategoryId(int? newCategoryId)
+    {
+        if (CategoryId != newCategoryId)
+        {
+            CategoryId = newCategoryId;
+            await CategoryIdChanged.InvokeAsync(newCategoryId);
+        }
+    }
 
     private async Task HandleValidSubmit()
     {

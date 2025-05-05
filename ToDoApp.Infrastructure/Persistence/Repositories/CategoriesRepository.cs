@@ -33,8 +33,6 @@ public class CategoriesRepository(AppDbContext dbContext, IMapper mapper) : ICat
         return mapper.Map<List<Category>>(taskItems);
     }
 
-    public Task<Category?> GetByIdAsync(int Id)
-    {
-        throw new NotImplementedException();
-    }
+    public Task<bool> CheckIfWasAssignedToATaskAsync(int Id) => dbContext.TaskItems.AnyAsync(task => task.CategoryId == Id);
+
 }

@@ -8,8 +8,10 @@
     <MudPaper Class="pa-8" Elevation="3">
         <MudText Typo="Typo.h4" Class="mb-6">Create New Task</MudText>
         <Form Task="TaskItem"
-                       OnSubmit="SubmitAsync"
-                       OnCancel="Cancel"
-                       IsSubmitting="IsSubmitting" />
+            CategoryId="CategoryId"
+            OnSubmit="SubmitAsync"
+            OnCancel="Cancel"
+            IsSubmitting="IsSubmitting"
+            CategoryIdChanged="UpdateCategoryId" />
     </MudPaper>
 </MudContainer>

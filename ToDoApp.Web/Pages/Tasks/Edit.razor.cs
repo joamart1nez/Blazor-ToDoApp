@@ -16,6 +16,7 @@ public partial class EditTaskPage : BaseFormTaskPage
         {
             GetTaskQuery getTaskQuery = new() { Id = Id };
             TaskItem = await Mediator.Send(getTaskQuery);
+            CategoryId = TaskItem?.Category?.Id;
         }
         catch (Exception ex)
         {
@@ -35,6 +36,8 @@ public partial class EditTaskPage : BaseFormTaskPage
         try
         {
             EditTaskCommand editTaskCommand = Mapper.Map<EditTaskCommand>(TaskItem);
+            editTaskCommand.CategoryId = CategoryId;
+
             await Mediator.Send(editTaskCommand);
             ShowSuccessMessage("Task edited successfully");
         }

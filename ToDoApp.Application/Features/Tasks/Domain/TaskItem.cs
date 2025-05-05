@@ -56,7 +56,7 @@ public class TaskItem
     /// <summary>
     /// Associated category (optional).
     /// </summary>
-    public virtual Category? Category { get; set; }
+    public Category? Category { get; set; }
 
     public bool Exist => Id is not 0;
 }

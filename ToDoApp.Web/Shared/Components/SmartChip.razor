@@ -1,0 +1,51 @@
+﻿@using MudBlazor 
+
+@if (!string.IsNullOrEmpty(Color))
+{
+    var style = GetChipStyle();
+    <MudChip T="string" Style="@style">@Content</MudChip>
+}
+
+@code {
+    private const string BLACK_COLOR = "#000000";
+    private const string WHITE_COLOR = "#FFFFFF";
+
+    [Parameter] public string? Color { get; set; }
+
+    [Parameter] public string Content { get; set; } = string.Empty;
+
+    private string GetChipStyle()
+    {
+        if (string.IsNullOrEmpty(Color))
+            return string.Empty;
+
+        string textColor = GetContrastColor(Color);
+        return $"background-color: {Color}; color: {textColor};";
+    }
+
+    private string GetContrastColor(string hexColor)
+    {
+        try
+        {
+            hexColor = hexColor.Replace("#", "");
+
+            // Handle shorthand hex (like #FFF)
+            if (hexColor.Length == 3)
+            {
+                hexColor = string.Concat(hexColor[0], hexColor[0], hexColor[1], hexColor[1], hexColor[2], hexColor[2]);
+            }
+
+            var r = Convert.ToInt32(hexColor.Substring(0, 2), 16);
+            var g = Convert.ToInt32(hexColor.Substring(2, 2), 16);
+            var b = Convert.ToInt32(hexColor.Substring(4, 2), 16);
+
+            // Calculate relative luminance (WCAG formula)
+            var luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+            return luminance > 0.5 ? BLACK_COLOR : WHITE_COLOR;
+        }
+        catch
+        {
+            return BLACK_COLOR; // Fallback to black text
+        }
+    }
+}

@@ -28,8 +28,15 @@
 
     private async Task Delete()
     {
-        await OnDeleteCallback.InvokeAsync(ItemId);
+        try
+        {
+            await OnDeleteCallback.InvokeAsync(ItemId);
 
-        MudDialog.Close(DialogResult.Ok(true));
+            MudDialog.Close(DialogResult.Ok(true));
+        }
+        catch (Exception)
+        {
+            MudDialog.Close(DialogResult.Cancel());
+        }
     }
 }

@@ -18,10 +18,16 @@ public abstract class BaseFormTaskPage : ComponentBase
     [Inject] protected ISnackbar Snackbar { get; set; } = null!;
 
     protected TaskItem TaskItem { get; set; } = null!;
+    protected int? CategoryId { get; set; } = null;
     protected bool IsSubmitting { get; set; } = false;
     protected bool IsLoading { get; set; } = false;
 
     protected abstract Task SubmitAsync();
+
+    protected void UpdateCategoryId(int? newCategoryId)
+    {
+        CategoryId = newCategoryId;
+    }
 
     protected void Cancel() => NavigationManager.NavigateTo(TasksRoute.Index);
 

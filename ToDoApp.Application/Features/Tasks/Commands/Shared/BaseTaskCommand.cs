@@ -15,4 +15,6 @@ public abstract class BaseTaskCommand
 
     [Required]
     public Priority Priority { get; set; } = Priority.Medium;
+
+    public int? CategoryId { get; set; }
 }

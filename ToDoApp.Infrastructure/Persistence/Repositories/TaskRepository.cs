@@ -15,6 +15,7 @@ public class TaskRepository(AppDbContext dbContext, IMapper mapper) : ITaskRepos
         TaskItemEntity? taskItemEntity = await dbContext.TaskItems
             .AsNoTracking()
             .Where(task => task.Id == id)
+            .Include(task => task.Category)
             .FirstOrDefaultAsync();
 
         return taskItemEntity is not null ? mapper.Map<TaskItem>(taskItemEntity) : null;
@@ -22,7 +23,9 @@ public class TaskRepository(AppDbContext dbContext, IMapper mapper) : ITaskRepos
 
     public async Task<List<TaskItem>> GetAllAsync()
     {
-        List<TaskItemEntity> taskItems = await dbContext.TaskItems.AsNoTracking().ToListAsync();
+        List<TaskItemEntity> taskItems = await dbContext.TaskItems
+            .Include(task => task.Category)
+            .AsNoTracking().ToListAsync();
         return mapper.Map<List<TaskItem>>(taskItems);
     }
 
