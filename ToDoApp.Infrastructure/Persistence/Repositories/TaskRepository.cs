@@ -79,7 +79,14 @@ public class TaskRepository(AppDbContext dbContext, IMapper mapper) : ITaskRepos
     public async Task<TaskStatistics> GetTaskStatisticsAsync() => new()
     {
         CompletedCount = await dbContext.TaskItems.CountAsync(t => t.IsCompleted),
+
         IncompleteCount = await dbContext.TaskItems.CountAsync(t => !t.IsCompleted),
-        CountByPriority = await dbContext.TaskItems.GroupBy(t => t.Priority).ToDictionaryAsync(g => g.Key, g => g.Count())
+
+        CountByPriority = await dbContext.TaskItems.GroupBy(t => t.Priority).ToDictionaryAsync(g => g.Key, g => g.Count()),
+
+        CountByCategory = await dbContext.TaskItems
+            .Where(t => t.Category != null)
+            .GroupBy(t => t.Category!.Name)
+            .ToDictionaryAsync(g => g.Key, g => g.Count())
     };
 }

@@ -10,5 +10,8 @@ public class TaskStatistics
 
     public Dictionary<Priority, int> CountByPriority { get; set; } = [];
 
+    public Dictionary<string, int> CountByCategory { get; set; } = [];
+
     public int TotalCount => CompletedCount + IncompleteCount;
 }
+

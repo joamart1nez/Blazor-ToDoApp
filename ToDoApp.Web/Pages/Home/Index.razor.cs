@@ -19,16 +19,23 @@ public partial class HomePage : ComponentBase
 
     protected string[] PriorityLabels = [];
 
-    protected string ChartHeight = "600px";
+    protected double[] CategoryData = [];
+
+    protected string[] CategoryLabels = [];
+
+    protected string ChartHeight = "400px";
 
     protected override async Task OnInitializedAsync()
     {
-        TaskStatistics TaskStatistics = await Mediator.Send(new TaskStatisticsQuery());
+        TaskStatistics taskStatistics = await Mediator.Send(new TaskStatisticsQuery());
 
         CompletitionLabels = ["Complete", "Incomplete"];
-        CompletitionData = [(double)TaskStatistics.CompletedCount, (double)TaskStatistics.IncompleteCount];
+        CompletitionData = [(double)taskStatistics.CompletedCount, (double)taskStatistics.IncompleteCount];
 
-        PriorityLabels = TaskStatistics.CountByPriority.Select(p => p.Key.ToString()).ToArray();
-        PriorityData = TaskStatistics.CountByPriority.Select(p => (double)p.Value).ToArray();
+        PriorityLabels = taskStatistics.CountByPriority.Select(p => p.Key.ToString()).ToArray();
+        PriorityData = taskStatistics.CountByPriority.Select(p => (double)p.Value).ToArray();
+
+        CategoryLabels = taskStatistics.CountByCategory.Select(c => c.Key).ToArray();
+        CategoryData = taskStatistics.CountByCategory.Select(c => (double)c.Value).ToArray();
     }
 }
